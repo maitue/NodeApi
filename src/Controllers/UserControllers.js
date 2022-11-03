@@ -1,5 +1,5 @@
 const User = require('../Models/UserModels')
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcrypt');
 
 exports.register = function(req, res, next){   
     console.log(req) 
