@@ -1,24 +1,14 @@
 const User = require('../Models/UserModels')
 const bcrypt = require('bcrypt');
+const {con} = require('../connect')
 
 exports.register = function(req, res, next){   
-    User.findOne({email: req.body.email}, (err, user) => {
-        if(user == null){ //Kiểm tra xem email đã được sử dụng chưa
-            bcrypt.hash(req.body.password, 10, function(err, hash){ //Mã hóa mật khẩu trước khi lưu vào db
-                if (err) {return next(err);}
-                const user = new User(req.body)
-                user.role = ['customer'] //sau khi register thì role auto là customer
-                user.password = hash;
-                user.username = req.body.username
-                user.email = req.body.email
-                user.password_confirm = hash;
-                user.save((err, result) => {
-                    if(err) {return res.json({err})}
-                    res.json({user: result})
-                })
-            })
-        }else{
-            res.json({err: 'Email has been used'})
-        }
-    })
+    con.connect(function(err) {
+        bcrypt.hash(req.body.password, 10, function(err, hash){ 
+            var sql = "INSERT INTO users (email, password, username, paswword_confirm) VALUES ('"+ req.body.email +"','" + hash + "','" + req.body.username +"','" + hash +"')";
+            con.query(sql, function (err, result) {
+                res.send(result);
+            });
+        })
+      });
 }

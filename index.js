@@ -5,8 +5,6 @@ const bodyParser = require('body-parser')
 const expressValidator = require('express-validator')
 const routes = require('./src/routes/routes')
 const mongoose = require('mongoose')
-const mysql = require('mysql');
-
 const app = express()
 const PORT = process.env.PORT || 8080
 const db = mongoose.connection;
@@ -23,22 +21,7 @@ dotenv.config()
 
 // app.use(morgan("dev"))
 
-var con = mysql.createConnection({
-  host: process.env.MYSQL_HOST,
-  user: process.env.USER_NAME,
-  password: process.env.PASSWORD_MYSQL,
-  database: process.env.DATABASE_NAME,
-});
-con.on('error', function(err) {
-    console.log("[mysql error]",err);
-  });
-con.connect(function(err) {
-  if(err) {
-    console.log(err);
-  }else {
-    console.log('connecting')
-  }
-});
+
 app.use(bodyParser.json())
 app.use('/', routes)
 app.listen(PORT, () => {console.log("Server started on http://localhost:"+PORT)})
