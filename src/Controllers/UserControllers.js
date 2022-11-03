@@ -2,7 +2,6 @@ const User = require('../Models/UserModels')
 const bcrypt = require('bcrypt');
 
 exports.register = function(req, res, next){   
-    console.log(req) 
     User.findOne({email: req.body.email}, (err, user) => {
         if(user == null){ //Kiểm tra xem email đã được sử dụng chưa
             bcrypt.hash(req.body.password, 10, function(err, hash){ //Mã hóa mật khẩu trước khi lưu vào db
